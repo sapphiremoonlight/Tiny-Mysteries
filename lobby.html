@@ -11,8 +11,10 @@
   <div class="container">
     <header>
       <h1>Tiny Mysteries Lobby</h1>
-      <p>Room Code: <span id="room-code">ABC123</span></p>
-    </header>
+	<p>Room Code: <span id="room-code"></span></p>
+	<ul id="player-list"></ul>
+	<button id="start-game">Start Game</button>
+     </header>
 
     <main>
       <section class="players-list">
@@ -21,9 +23,7 @@
           <!-- Player names will appear here dynamically -->
         </ul>
       </section>
-
-      <button id="start-game" class="host-btn">Start Game</button>
-    </main>
+      </main>
 
     <footer>
       <p>Waiting for friends to join...</p>
@@ -31,10 +31,11 @@
   </div>
 
   <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-auth-compat.js"></script>
+
+  <script src="scripts/game.js"></script>
   <script src="scripts/lobby.js"></script>
 </body>
-
 </html>
