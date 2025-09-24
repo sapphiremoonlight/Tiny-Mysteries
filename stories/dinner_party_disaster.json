@@ -1,0 +1,20 @@
+
+{
+  "title": "Dinner Party Disaster",
+  "intro": "A lavish dinner party is hosted at the sprawling mansion of billionaire Charles Beaumont. Before dessert is served, Charles is found dead in his study. The doors were closed, the guests were inside, and everyone has something to hide...",
+  "clues": [
+    "A shattered wine glass is found in the study, with traces of poison. Everyone had wine, but only Charles’s was tainted.",
+    "Charles’s desk contains a ledger showing missing business funds — implicating Richard.",
+    "A love letter addressed to Evelyn, signed only with the initial 'C'.",
+    "In a locked drawer, a draft of Charles’s new will is found — Evelyn was to be cut out entirely.",
+    "A faint trace of Evelyn’s distinct perfume lingers on the rim of the poisoned glass."
+  ],
+  "suspects": [
+    "Evelyn Beaumont (Wife)",
+    "Richard Hale (Business Partner)",
+    "Clara Devereaux (Artist)",
+    "Senator Brooks (Politician)",
+    "Mr. Graves (Butler)"
+  ],
+  "killer": "Evelyn Beaumont (Wife)"
+}

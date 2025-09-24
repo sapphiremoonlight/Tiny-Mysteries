@@ -1,0 +1,19 @@
+{
+  "title": "Beach Bonfire Incident",
+  "intro": "During a summer bonfire party at Sunset Beach, someone collapses after drinking from a cooler. With waves crashing nearby and everyone in high spirits, secrets soon surface...",
+  "clues": [
+    "One drink was tampered with — only the victim drank from that cup.",
+    "The lifeguard was seen sneaking near the cooler earlier in the evening.",
+    "A surfboard near the bonfire has suspicious stains.",
+    "A partially hidden note says: 'He’ll regret this,' in the victim's handwriting.",
+    "The rival friend had a stash of unused drinks matching the poisoned one."
+  ],
+  "suspects": [
+    "Lifeguard",
+    "Surfer",
+    "DJ",
+    "Bartender",
+    "Rival Friend"
+  ],
+  "killer": "Rival Friend"
+}

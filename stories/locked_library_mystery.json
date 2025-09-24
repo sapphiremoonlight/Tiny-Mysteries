@@ -1,0 +1,21 @@
+locked_library_mystery.json
+
+{
+  "title": "Locked Library Mystery",
+  "intro": "The city library’s archives are quiet at midnight… until a scream echoes. The librarian is found unconscious in the archives, and the room appears locked from the inside.",
+  "clues": [
+    "A rare manuscript is missing from the archives.",
+    "Security logs show a badge entry at 11:50 pm.",
+    "The window latch is broken, indicating possible exit.",
+    "A set of muddy footprints leads toward the hidden bookcase.",
+    "A torn page with the History Professor's notes is found near the librarian."
+  ],
+  "suspects": [
+    "Janitor",
+    "History Professor",
+    "Student",
+    "Security Guard",
+    "Archivist"
+  ],
+  "killer": "History Professor"
+}

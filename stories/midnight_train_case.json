@@ -1,0 +1,20 @@
+midnight_train_case.json
+{
+  "title": "Midnight Train Case",
+  "intro": "An overnight train travels through the countryside. When morning comes, a passenger is missing from their cabin, window open, belongings left behind. Something sinister occurred in the night.",
+  "clues": [
+    "Ticket punch shows the victim never got off at their stop.",
+    "Footprints lead to an open window in the cabin.",
+    "A torn piece of fabric is found in a travel bag nearby.",
+    "The Conductor’s schedule shows a strange unsupervised period during the night.",
+    "A small suitcase with the Salesman’s initials contains documents belonging to the victim."
+  ],
+  "suspects": [
+    "Conductor",
+    "Sleeper Car Attendant",
+    "Traveling Salesman",
+    "Tourist",
+    "Detective"
+  ],
+  "killer": "Traveling Salesman"
+}
