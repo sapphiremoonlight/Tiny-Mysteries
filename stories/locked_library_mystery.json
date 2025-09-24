@@ -1,5 +1,3 @@
-locked_library_mystery.json
-
 {
   "title": "Locked Library Mystery",
   "intro": "The city library’s archives are quiet at midnight… until a scream echoes. The librarian is found unconscious in the archives, and the room appears locked from the inside.",
@@ -19,3 +17,4 @@ locked_library_mystery.json
   ],
   "killer": "History Professor"
 }
+
