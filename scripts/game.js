@@ -66,10 +66,85 @@ document.addEventListener("DOMContentLoaded", () => {
   // ============================
   // DISPLAY FUNCTIONS
   // ============================
-  function showIntro() { /* ...your existing code... */ }
-  function showNextClue() { /* ...your existing code... */ }
-  function showSuspects() { /* ...your existing code... */ }
-  function checkAnswer(selected) { /* ...your existing code... */ }
+  function showIntro() {
+  const container = document.querySelector(".container");
+  container.innerHTML = `
+    <header>
+      <h1>${currentStory.title}</h1>
+      <p>${currentStory.intro}</p>
+    </header>
+    <main>
+      <button id="next-clue">Reveal First Clue</button>
+    </main>
+  `;
+  document.getElementById("next-clue").addEventListener("click", showNextClue);
+}
+
+function showNextClue() {
+  if (currentClueIndex >= currentStory.clues.length) {
+    showSuspects();
+    return;
+  }
+
+  const clue = currentStory.clues[currentClueIndex];
+  currentClueIndex++;
+
+  const container = document.querySelector(".container");
+  container.innerHTML = `
+    <header>
+      <h1>${currentStory.title}</h1>
+      <p>Clue ${currentClueIndex} of ${currentStory.clues.length}</p>
+    </header>
+    <main>
+      <div class="clue-card">
+        <p>${clue}</p>
+      </div>
+      <button id="next-clue">${currentClueIndex < currentStory.clues.length ? "Next Clue" : "Reveal Suspects"}</button>
+    </main>
+  `;
+  document.getElementById("next-clue").addEventListener("click", showNextClue);
+}
+
+function showSuspects() {
+  const container = document.querySelector(".container");
+  const suspectsHTML = currentStory.suspects.map(
+    (s, index) => `<button class="suspect-btn" data-index="${index}">${s}</button>`
+  ).join("");
+
+  container.innerHTML = `
+    <header>
+      <h1>${currentStory.title}</h1>
+      <p>Who is the killer?</p>
+    </header>
+    <main>
+      <div class="suspects">${suspectsHTML}</div>
+    </main>
+  `;
+
+  document.querySelectorAll(".suspect-btn").forEach((btn) => {
+    btn.addEventListener("click", () => checkAnswer(btn.textContent));
+  });
+}
+
+function checkAnswer(selected) {
+  const container = document.querySelector(".container");
+  const correct = currentStory.killer;
+
+  container.innerHTML = `
+    <header>
+      <h1>${currentStory.title}</h1>
+    </header>
+    <main>
+      <div class="result-card">
+        <p>${selected === correct ? "🎉 Correct!" : "❌ Wrong!"}</p>
+        <p>The killer was: <strong>${correct}</strong></p>
+      </div>
+      <button id="play-again">Play Again</button>
+    </main>
+  `;
+
+  document.getElementById("play-again").addEventListener("click", () => window.location.reload());
+}
 
   // ============================
   // EXAMPLE FIREBASE USAGE
@@ -77,3 +152,4 @@ document.addEventListener("DOMContentLoaded", () => {
   db.ref('test').set({ message: "Hello Firebase!" });
 
 });
+
