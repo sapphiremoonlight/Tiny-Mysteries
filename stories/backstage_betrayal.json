@@ -1,0 +1,19 @@
+{
+  "title": "Backstage Betrayal",
+  "intro": "Opening night of the school play: excitement, nerves, and ambition. Moments before the curtain rises, the lead actor collapses in the dressing room. Who sabotaged the performance?",
+  "clues": [
+    "The costume was slightly cut in the seams.",
+    "The understudy was seen lingering near the dressing room suspiciously.",
+    "A prop sword had been swapped for a sharper version.",
+    "A note in the director’s handwriting threatens failure if the actor performs.",
+    "The Stage Manager’s fingerprints are on the swapped prop sword."
+  ],
+  "suspects": [
+    "Understudy",
+    "Stage Manager",
+    "Costume Designer",
+    "Director",
+    "Rival Actor"
+  ],
+  "killer": "Stage Manager"
+}
