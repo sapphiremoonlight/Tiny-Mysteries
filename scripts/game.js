@@ -11,145 +11,170 @@ const firebaseConfig = {
   measurementId: "G-3CFRNFG9K5"
 };
 
-// Initialize Firebase (global)
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// Sign in anonymously so users can interact
+firebase.auth().signInAnonymously()
+  .then(() => console.log("✅ Signed in anonymously"))
+  .catch(err => console.error("❌ Auth error:", err));
+
 document.addEventListener("DOMContentLoaded", () => {
   // ============================
-  // BASIC GAME LOGIC (PROTOTYPE)
+  // SELECT BUTTONS
   // ============================
-
-  // Select buttons
   const createBtn = document.getElementById("create-game");
   const joinBtn = document.getElementById("join-game");
 
-  // Global game state
+  // Global state
   let currentStory = null;
   let currentClueIndex = 0;
+  let roomId = null;
+  let playerName = "Player-" + Math.floor(Math.random() * 1000);
 
   // ============================
-  // BUTTON EVENTS
+  // CREATE GAME
   // ============================
-  createBtn.addEventListener("click", () => {
-    loadStory("stories/dinner_party_disaster.json");
+  createBtn.addEventListener("click", async () => {
+    // Generate room code
+    roomId = Math.random().toString(36).substring(2, 8);
+
+    // Load story JSON
+    const res = await fetch("stories/dinner_party_disaster.json");
+    currentStory = await res.json();
+
+    // Create room in Firebase
+    await db.ref(`rooms/${roomId}`).set({
+      host: playerName,
+      story: currentStory,
+      currentClueIndex: 0,
+      players: { [playerName]: { name: playerName } }
+    });
+
+    alert(`✅ Room created! Code: ${roomId}`);
+    listenForRoomUpdates();
   });
 
-  joinBtn.addEventListener("click", () => {
+  // ============================
+  // JOIN GAME
+  // ============================
+  joinBtn.addEventListener("click", async () => {
     const code = prompt("Enter Room Code:");
-    if (code) {
-      alert(`Joining game ${code}... (multiplayer to be implemented)`);
-      loadStory("stories/dinner_party_disaster.json");
+    if (!code) return;
+    roomId = code;
+
+    const roomRef = db.ref(`rooms/${roomId}`);
+    const snapshot = await roomRef.get();
+
+    if (!snapshot.exists()) {
+      alert("❌ Room not found!");
+      return;
     }
+
+    // Add player to Firebase
+    await db.ref(`rooms/${roomId}/players/${playerName}`).set({ name: playerName });
+    alert(`🎉 Joined room ${roomId}`);
+
+    listenForRoomUpdates();
   });
 
   // ============================
-  // LOAD STORY JSON
+  // LISTEN FOR ROOM UPDATES
   // ============================
-  function loadStory(path) {
-  console.log("Loading story:", path);
-  fetch(path)
-    .then((res) => {
-      console.log("Fetch response:", res);
-      if (!res.ok) throw new Error("Story not found");
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Story data loaded:", data);
-      currentStory = data;
-      currentClueIndex = 0;
-      showIntro();
-    })
-    .catch((err) => console.error("Failed to load story:", err));
-}
+  function listenForRoomUpdates() {
+    const roomRef = db.ref(`rooms/${roomId}`);
+    roomRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
 
-  // ============================
-  // DISPLAY FUNCTIONS
-  // ============================
-  function showIntro() {
-  const container = document.querySelector(".container");
-  container.innerHTML = `
-    <header>
-      <h1>${currentStory.title}</h1>
-      <p>${currentStory.intro}</p>
-    </header>
-    <main>
-      <button id="next-clue">Reveal First Clue</button>
-    </main>
-  `;
-  document.getElementById("next-clue").addEventListener("click", showNextClue);
-}
+      currentStory = data.story;
+      currentClueIndex = data.currentClueIndex || 0;
 
-function showNextClue() {
-  if (currentClueIndex >= currentStory.clues.length) {
-    showSuspects();
-    return;
+      console.log("📡 Room updated:", data);
+
+      // Show game screen if story is loaded
+      if (currentStory) {
+        showGameState();
+      }
+    });
   }
 
-  const clue = currentStory.clues[currentClueIndex];
-  currentClueIndex++;
-
-  const container = document.querySelector(".container");
-  container.innerHTML = `
-    <header>
-      <h1>${currentStory.title}</h1>
-      <p>Clue ${currentClueIndex} of ${currentStory.clues.length}</p>
-    </header>
-    <main>
-      <div class="clue-card">
-        <p>${clue}</p>
-      </div>
-      <button id="next-clue">${currentClueIndex < currentStory.clues.length ? "Next Clue" : "Reveal Suspects"}</button>
-    </main>
-  `;
-  document.getElementById("next-clue").addEventListener("click", showNextClue);
-}
-
-function showSuspects() {
-  const container = document.querySelector(".container");
-  const suspectsHTML = currentStory.suspects.map(
-    (s, index) => `<button class="suspect-btn" data-index="${index}">${s}</button>`
-  ).join("");
-
-  container.innerHTML = `
-    <header>
-      <h1>${currentStory.title}</h1>
-      <p>Who is the killer?</p>
-    </header>
-    <main>
-      <div class="suspects">${suspectsHTML}</div>
-    </main>
-  `;
-
-  document.querySelectorAll(".suspect-btn").forEach((btn) => {
-    btn.addEventListener("click", () => checkAnswer(btn.textContent));
-  });
-}
-
-function checkAnswer(selected) {
-  const container = document.querySelector(".container");
-  const correct = currentStory.killer;
-
-  container.innerHTML = `
-    <header>
-      <h1>${currentStory.title}</h1>
-    </header>
-    <main>
-      <div class="result-card">
-        <p>${selected === correct ? "🎉 Correct!" : "❌ Wrong!"}</p>
-        <p>The killer was: <strong>${correct}</strong></p>
-      </div>
-      <button id="play-again">Play Again</button>
-    </main>
-  `;
-
-  document.getElementById("play-again").addEventListener("click", () => window.location.reload());
-}
-
   // ============================
-  // EXAMPLE FIREBASE USAGE
+  // SHOW GAME STATE (CLUES)
   // ============================
-  db.ref('test').set({ message: "Hello Firebase!" });
+  function showGameState() {
+    if (currentClueIndex < currentStory.clues.length) {
+      showClue(currentStory.clues[currentClueIndex]);
+    } else {
+      showSuspects();
+    }
+  }
 
+  function showClue(clue) {
+    const container = document.querySelector(".container");
+    container.innerHTML = `
+      <header>
+        <h1>${currentStory.title}</h1>
+        <p>Clue ${currentClueIndex + 1} of ${currentStory.clues.length}</p>
+      </header>
+      <main>
+        <div class="clue-card">
+          <p>${clue}</p>
+        </div>
+        <button id="next-clue">Next</button>
+      </main>
+    `;
+
+    document.getElementById("next-clue").addEventListener("click", () => {
+      // Only host can advance the game
+      db.ref(`rooms/${roomId}/host`).get().then(snapshot => {
+        if (snapshot.val() === playerName) {
+          db.ref(`rooms/${roomId}/currentClueIndex`).set(currentClueIndex + 1);
+        } else {
+          alert("Only the host can reveal the next clue!");
+        }
+      });
+    });
+  }
+
+  function showSuspects() {
+    const container = document.querySelector(".container");
+    const suspectsHTML = currentStory.suspects.map(
+      (s, index) => `<button class="suspect-btn" data-index="${index}">${s}</button>`
+    ).join("");
+
+    container.innerHTML = `
+      <header>
+        <h1>${currentStory.title}</h1>
+        <p>Who is the killer?</p>
+      </header>
+      <main>
+        <div class="suspects">${suspectsHTML}</div>
+      </main>
+    `;
+
+    document.querySelectorAll(".suspect-btn").forEach((btn) => {
+      btn.addEventListener("click", () => checkAnswer(btn.textContent));
+    });
+  }
+
+  function checkAnswer(selected) {
+    const container = document.querySelector(".container");
+    const correct = currentStory.killer;
+
+    container.innerHTML = `
+      <header>
+        <h1>${currentStory.title}</h1>
+      </header>
+      <main>
+        <div class="result-card">
+          <p>${selected === correct ? "🎉 Correct!" : "❌ Wrong!"}</p>
+          <p>The killer was: <strong>${correct}</strong></p>
+        </div>
+        <button id="play-again">Play Again</button>
+      </main>
+    `;
+
+    document.getElementById("play-again").addEventListener("click", () => window.location.reload());
+  }
 });
-
