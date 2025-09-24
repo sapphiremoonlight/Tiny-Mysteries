@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiny Mysteries Lobby</title>
+  <link rel="stylesheet" href="styles/styles.css">
+ <link rel="stylesheet" href="styles/lobby.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Tiny Mysteries Lobby</h1>
+      <p>Room Code: <span id="room-code">ABC123</span></p>
+    </header>
+
+    <main>
+      <section class="players-list">
+        <h2>Players in Room:</h2>
+        <ul id="player-list">
+          <!-- Player names will appear here dynamically -->
+        </ul>
+      </section>
+
+      <button id="start-game" class="host-btn">Start Game</button>
+    </main>
+
+    <footer>
+      <p>Waiting for friends to join...</p>
+    </footer>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-database-compat.js"></script>
+  <script src="scripts/lobby.js"></script>
+</body>
+</html>
