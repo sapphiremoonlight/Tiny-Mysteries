@@ -3,39 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tiny Mysteries Lobby</title>
+  <title>Tiny Mysteries - Game</title>
   <link rel="stylesheet" href="styles/styles.css">
- <link rel="stylesheet" href="styles/lobby.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Tiny Mysteries Lobby</h1>
-	<p>Room Code: <span id="room-code"></span></p>
-	<ul id="player-list"></ul>
-	<button id="start-game">Start Game</button>
-     </header>
-
+      <h1>Tiny Mysteries</h1>
+      <button id="back-home" class="home-btn">🏠 Back to Home</button>
+    </header>
     <main>
-      <section class="players-list">
-        <h2>Players in Room:</h2>
-        <ul id="player-list">
-          <!-- Player names will appear here dynamically -->
-        </ul>
-      </section>
-      </main>
-
-    <footer>
-      <p>Waiting for friends to join...</p>
-    </footer>
+      <p>Loading your story...</p>
+    </main>
   </div>
-
-  <!-- Firebase SDKs -->
-   <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.3.0/firebase-auth-compat.js"></script>
-
   <script src="scripts/game.js"></script>
-  <script src="scripts/lobby.js"></script>
 </body>
 </html>
